@@ -14,6 +14,9 @@ namespace VoiceSwnikTextBot
 {
     internal class Bot : BackgroundService
     {
+        /// <summary>
+        /// объект, отвеающий за отправку сообщений клиенту
+        /// </summary>
         private ITelegramBotClient _telegramClient;
 
         public Bot(ITelegramBotClient telegramClient)
@@ -37,7 +40,9 @@ namespace VoiceSwnikTextBot
             //  Обрабатываем нажатия на кнопки  из Telegram Bot API: https://core.telegram.org/bots/api#callbackquery
             if (update.Type == UpdateType.CallbackQuery)
             {
+                //await _telegramClient.SendTextMessageAsync(update.Message.Chat.Id, $"Длина сообщения: {update.Message.Text.Length} знаков", cancellationToken: cancellationToken);
                 await _telegramClient.SendTextMessageAsync(update.Message.Chat.Id, "Вы нажали кнопку", cancellationToken: cancellationToken);
+                await _telegramClient.SendTextMessageAsync(update.CallbackQuery.From.Id, $"Данный тип сообщений не поддерживается. Пожалуйста отправьте текст.", cancellationToken: cancellationToken);
                 return;
             }
 
@@ -45,8 +50,19 @@ namespace VoiceSwnikTextBot
             if (update.Type == UpdateType.Message)
             {
                 Console.WriteLine($"Получено сообщение {update.Message.Text}");
-                await _telegramClient.SendTextMessageAsync(update.Message.Chat.Id, $"Вы отправили сообщение {update.Message.Text}", cancellationToken: cancellationToken);
-                return;
+                switch (update.Message!.Type)
+                {
+                    case MessageType.Text:
+                        await _telegramClient.SendTextMessageAsync(update.Message.From.Id, $"Длина сообщения: {update.Message.Text.Length} знаков", cancellationToken: cancellationToken);
+                        return;
+                    default: // unsupported message
+                        await _telegramClient.SendTextMessageAsync(update.Message.From.Id, $"Данный тип сообщений не поддерживается. Пожалуйста отправьте текст.", cancellationToken: cancellationToken);
+                        return;
+                }
+
+
+                        //await _telegramClient.SendTextMessageAsync(update.Message.Chat.Id, $"Вы отправили сообщение {update.Message.Text}", cancellationToken: cancellationToken);
+                        return;
             }
         }
 
