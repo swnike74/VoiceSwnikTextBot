@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Text;
 using Telegram.Bot;
@@ -26,7 +28,7 @@ namespace VoiceSwnikTextBot
         static void ConfigureServices(IServiceCollection services)
         {
             // Регистрируем объект TelegramBotClient c токеном подключения
-            services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient("BOT_TOKEN"));
+            services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient("8096839111:AAH44MfT6dxoZ7kvLUH3VrdFbJVPaJx2NOk"));
             // Регистрируем постоянно активный сервис бота
             services.AddHostedService<Bot>();
         }
