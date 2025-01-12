@@ -46,13 +46,19 @@ namespace VoiceSwnikTextBot
             // Регистрируем постоянно активный сервис бота
             services.AddHostedService<Bot>();
 
-
+            // ..
+            services.AddSingleton<IFileHandler, AudioFileHandler>();
+            // ..
         }
+
         static AppSettings BuildAppSettings()
         {
             return new AppSettings()
             {
-                BotToken = "8096839111:AAH44MfT6dxoZ7kvLUH3VrdFbJVPaJx2NOk"
+                DownloadsFolder = "C:\\Users\\swnike\\Downloads",
+                BotToken = "8096839111:AAH44MfT6dxoZ7kvLUH3VrdFbJVPaJx2NOk",
+                AudioFileName = "audio",
+                InputAudioFormat = "ogg",
             };
         }
     }
