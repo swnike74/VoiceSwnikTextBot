@@ -5,6 +5,8 @@ using Microsoft.Extensions.Hosting;
 using System.Text;
 using Telegram.Bot;
 using VoiceSwnikTextBot.Controllers;
+using VoiceSwnikTextBot.Services;
+using VoiceSwnikTextBot.Configuration;
 
 namespace VoiceSwnikTextBot
 {
@@ -28,6 +30,11 @@ namespace VoiceSwnikTextBot
 
         static void ConfigureServices(IServiceCollection services)
         {
+            AppSettings appSettings = BuildAppSettings();
+            services.AddSingleton(appSettings);
+            //Регистрируем хранилище пользовательских данных
+            services.AddSingleton<IStorage, MemoryStorage>();
+
             // Подключаем контроллеры сообщений и кнопок
             services.AddTransient<DefaultMessageController>();
             services.AddTransient<VoiceMessageController>();
@@ -35,9 +42,18 @@ namespace VoiceSwnikTextBot
             services.AddTransient<InlineKeyboardController>();
 
             // Регистрируем объект TelegramBotClient c токеном подключения
-            services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient("8096839111:AAH44MfT6dxoZ7kvLUH3VrdFbJVPaJx2NOk"));
+            services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient(appSettings.BotToken));
             // Регистрируем постоянно активный сервис бота
             services.AddHostedService<Bot>();
+
+
+        }
+        static AppSettings BuildAppSettings()
+        {
+            return new AppSettings()
+            {
+                BotToken = "8096839111:AAH44MfT6dxoZ7kvLUH3VrdFbJVPaJx2NOk"
+            };
         }
     }
 }
