@@ -59,6 +59,8 @@ namespace VoiceSwnikTextBot
                 BotToken = "8096839111:AAH44MfT6dxoZ7kvLUH3VrdFbJVPaJx2NOk",
                 AudioFileName = "audio",
                 InputAudioFormat = "ogg",
+                OutputAudioFormat = "wav", // 
+                InputAudioBitrate = 48000,
             };
         }
     }
