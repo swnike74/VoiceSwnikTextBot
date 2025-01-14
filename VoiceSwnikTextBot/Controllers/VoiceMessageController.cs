@@ -35,8 +35,10 @@ namespace VoiceSwnikTextBot.Controllers
             //await _telegramClient.SendTextMessageAsync(message.Chat.Id, $"Получено голосовое сообщение", cancellationToken: ct);
 
             string userLanguageCode = _memoryStorage.GetSession(message.Chat.Id).LanguageCode; // Здесь получим язык из сессии пользователя
-            _audioFileHandler.Process(userLanguageCode); // Запустим обработку
+            var result = _audioFileHandler.Process(userLanguageCode); // Запустим обработку
             await _telegramClient.SendTextMessageAsync(message.Chat.Id, "Голосовое сообщение конвертировано в формат .WAV", cancellationToken: ct);
+
+            await _telegramClient.SendTextMessageAsync(message.Chat.Id, result, cancellationToken: ct);
         }
     }
 }
